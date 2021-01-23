@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VisualCubeEditor</title>
+    <style>
+        * {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="result"></div>
+    <div id="img"></div>
+    <div id="color"></div>
+    <div id="form"></div>
+    <script>
+        cubeSize = 4;
+        faceList = ["0", "1", "2", "3", "4", "5"];
+        positionListX = [1, 0, 1, 2, 3, 1];
+        positionListY = [0, 1, 1, 1, 1, 2];
+        colorList = ["white", "orange", "green", "red", "blue", "yellow"];
+        faceletSize = 50;
+        shortColorList = ["w", "o", "g", "r", "b", "y"];
+        faceletColorList = [];
+        for(i=0; i<6; i++) {
+            tmplist = [];
+            for(j=0; j<cubeSize*cubeSize; j++) {
+                tmplist.push(shortColorList[i]);
+            }
+            faceletColorList.push(tmplist);
+        }
+        currentColor = "w";
+        document.getElementById("form").innerHTML += "<label style='top:" + (faceletSize * cubeSize * 3 + 5) + "px;left:0px;'>size</label><input type='text' id='size' value='100' style='top:" + (faceletSize * cubeSize * 3 + 5) + "px;left:50px;'>";
+        document.getElementById("form").innerHTML += "<label style='top:" + (faceletSize * cubeSize * 3 + 35) + "px;left:0px'>x</label><input type='text' id='x' value='-34' style='top:" + (faceletSize * cubeSize * 3 + 35) + "px;left:50px'>";
+        document.getElementById("form").innerHTML += "<label style='top:" + (faceletSize * cubeSize * 3 + 65) + "px;left:0px'>y</label><input type='text' id='y' value='45' style='top:" + (faceletSize * cubeSize * 3 + 65) + "px;left:50px'>";
+        document.getElementById("form").innerHTML += "<input style='top:" + (faceletSize * cubeSize * 3 + 95) + "px;left:0px' type='button' id='submit' value='Generate!'>";
+        document.getElementById("form").innerHTML += "<p style='top:" + (faceletSize * cubeSize * 3 + 125) + "px;left:0px;width:700px;'>VisualCubeEditorです<br>Generate!を押すことで画像を生成できます<br>右上の色ボタンをクリックすると色が選択できます<br>展開図のステッカーをクリックするとそのステッカーの色を変更できます<br>サイズも指定できます<br>xでは全体のx軸回転、yでは全体のy軸回転を度数により指定できます（マイナスも可）</p>";
+
+        for (i = 0; i < faceList.length; i++) {
+            for (j = 0; j < cubeSize; j++) {
+                for (k = 0; k < cubeSize; k++) {
+                    faceletID = j * cubeSize + k;
+                    if(faceletID < 10) {
+                        faceletID = "0" + faceletID;
+                    }
+                    document.getElementById("result").innerHTML += "<div id='" + faceList[i] + faceletID + "' style='top:" + (faceletSize * cubeSize * positionListY[i] + faceletSize * j) + "px;left:" + (faceletSize * cubeSize * positionListX[i] + faceletSize * k) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:" + colorList[i] + ";border:1px solid black;'></div>";
+                }
+            }
+        }
+        document.getElementById("result").innerHTML += "<div id='sample' style='top:0px;left:0px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:white;border:1px solid black;'></div>";
+
+        document.getElementById("color").innerHTML += "<div id='color0' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 1) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:white;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color1' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 2)+ "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:orange;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color2' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 3) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:green;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color3' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 4) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:red;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color4' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 5) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:blue;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color5' style='top:0px;left:" + faceletSize * (cubeSize * 2 + 6) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:yellow;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color6' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 1) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:black;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color7' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 2) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:darkgray;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color8' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 3) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:lightgray;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color9' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 4) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:silver;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color10' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 5) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:purple;border:1px solid black;'></div>";
+        document.getElementById("color").innerHTML += "<div id='color11' style='top:" + faceletSize + "px;left:" + faceletSize * (cubeSize * 2 + 6) + "px;width:" + faceletSize + "px;height:" + faceletSize + "px;background-color:pink;border:1px solid black;'></div>";
+        for(i=0; i<12; i++) {
+            document.getElementById("color" + i).onclick = function(){
+                document.getElementById("sample").style.backgroundColor = this.style.backgroundColor;
+                if(this.style.backgroundColor == "white") {
+                    currentColor = "w";
+                }else if(this.style.backgroundColor == "orange") {
+                    currentColor = "o";
+                }else if(this.style.backgroundColor == "green") {
+                    currentColor = "g";
+                }else if(this.style.backgroundColor == "red") {
+                    currentColor = "r";
+                }else if(this.style.backgroundColor == "blue") {
+                    currentColor = "b";
+                }else if(this.style.backgroundColor == "yellow") {
+                    currentColor = "y";
+                }else if(this.style.backgroundColor == "black") {
+                    currentColor = "n";
+                }else if(this.style.backgroundColor == "darkgray") {
+                    currentColor = "d";
+                }else if(this.style.backgroundColor == "lightgray") {
+                    currentColor = "l";
+                }else if(this.style.backgroundColor == "silver") {
+                    currentColor = "s";
+                }else if(this.style.backgroundColor == "purple") {
+                    currentColor = "m";
+                }else if(this.style.backgroundColor == "pink") {
+                    currentColor = "p";
+                }
+            };
+        }
+
+        for (i = 0; i < faceList.length; i++) {
+            for (j = 0; j < cubeSize; j++) {
+                for (k = 0; k < cubeSize; k++) {
+                    faceletID = j * cubeSize + k;
+                    if(faceletID < 10) {
+                        faceletID = "0" + faceletID;
+                    }
+                    document.getElementById(faceList[i] + faceletID).onclick = function () {
+                        this.style.backgroundColor = document.getElementById("sample").style.backgroundColor;
+                        faceNum = parseInt(parseInt(this.id) / 100);
+                        faceletNum = parseInt(this.id) % 100;
+                        faceletColorList[faceNum][faceletNum] = currentColor
+                    };
+                }
+            }
+        }
+        document.getElementById("submit").onclick = function () {
+            visualCubeFC = "";
+            visualCubeColorList = [0, 3, 2, 5, 1, 4];
+            for (i = 0; i < visualCubeColorList.length; i++) {
+                for (j = 0; j < cubeSize * cubeSize; j++) {
+                    visualCubeFC += faceletColorList[visualCubeColorList[i]][j];
+                }
+            }
+            size = document.getElementById("size").value;
+            x = document.getElementById("x").value;
+            y = document.getElementById("y").value;
+            // size = 100;
+            document.getElementById("img").innerHTML = "<img src='http://cube.crider.co.uk/visualcube.php?fmt=png&pzl=" + cubeSize + "&size=" + size + "&r=y" + y + "x" + x + "&fc=" + visualCubeFC + "' style='top:" + faceletSize * (cubeSize * 2 + 1) + "px;left:" + faceletSize * (cubeSize * 2 + 1) + "px;'>";
+        };
+    </script>
+</body>
+</html>
